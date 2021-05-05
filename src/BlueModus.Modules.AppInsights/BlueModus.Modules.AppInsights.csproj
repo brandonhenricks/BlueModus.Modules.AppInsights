@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kentico.CodeAnalysis.Ruleset" Version="10.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Kentico.Xperience.Libraries" Version="13.0.23" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.17.0" />
+  </ItemGroup>
+
+</Project>
