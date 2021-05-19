@@ -26,6 +26,9 @@ namespace BlueModus.Modules.AppInsights.EventHandlers
             StagingEvents.Synchronize.Before += Staging_Synchronize_Before;
             StagingEvents.Synchronize.After += Staging_Synchronize_After;
             StagingEvents.Synchronize.Failure += Staging_Synchronize_Failure;
+            StagingEvents.SynchronizeTask.Before += Staging_SynchronizeTask_Before;
+            StagingEvents.SynchronizeTask.After += Staging_SynchronizeTask_After;
+            StagingEvents.SynchronizeTask.Failure += Staging_SynchronizeTask_Failure;
             base.OnInit();
         }
 
@@ -39,7 +42,7 @@ namespace BlueModus.Modules.AppInsights.EventHandlers
 
         private void Staging_Synchronize_After(object sender, CMS.Base.CMSEventArgs e)
         {
-            var telemetry = new EventTelemetry("Staging Synchronization Task Finished")
+            var telemetry = new EventTelemetry("Staging Synchronization Finished")
             {
                 Timestamp = DateTimeOffset.UtcNow
             };
@@ -49,7 +52,7 @@ namespace BlueModus.Modules.AppInsights.EventHandlers
 
         private void Staging_Synchronize_Before(object sender, CMS.Base.CMSEventArgs e)
         {
-            var telemetry = new EventTelemetry("Staging Synchronization Task Starting")
+            var telemetry = new EventTelemetry("Staging Synchronization Starting")
             {
                 Timestamp = DateTimeOffset.UtcNow
             };
@@ -59,10 +62,58 @@ namespace BlueModus.Modules.AppInsights.EventHandlers
 
         private void Staging_Synchronize_Failure(object sender, CMS.Base.CMSEventArgs e)
         {
+            var telemetry = new EventTelemetry("Staging Synchronization Failed")
+            {
+                Timestamp = DateTimeOffset.UtcNow
+            };
+
+            _telemetryService.TrackEvent(telemetry);
+        }
+
+        private void Staging_SynchronizeTask_After(object sender, StagingTaskEventArgs e)
+        {
+            var telemetry = new EventTelemetry("Staging Synchronization Task Finished")
+            {
+                Timestamp = DateTimeOffset.UtcNow
+            };
+
+            telemetry.Properties[nameof(e.Task.TaskDocumentID)] = e.Task.TaskDocumentID.ToString() ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskID)] = e.Task.TaskID.ToString() ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskSiteID)] = e.Task.TaskSiteID.ToString() ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskTitle)] = e.Task.TaskTitle ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskServers)] = e.Task.TaskServers ?? string.Empty;
+
+            _telemetryService.TrackEvent(telemetry);
+        }
+
+        private void Staging_SynchronizeTask_Before(object sender, StagingTaskEventArgs e)
+        {
+            var telemetry = new EventTelemetry("Staging Synchronization Task Starting")
+            {
+                Timestamp = DateTimeOffset.UtcNow
+            };
+
+            telemetry.Properties[nameof(e.Task.TaskDocumentID)] = e.Task.TaskDocumentID.ToString() ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskID)] = e.Task.TaskID.ToString() ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskSiteID)] = e.Task.TaskSiteID.ToString() ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskTitle)] = e.Task.TaskTitle ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskServers)] = e.Task.TaskServers ?? string.Empty;
+
+            _telemetryService.TrackEvent(telemetry);
+        }
+
+        private void Staging_SynchronizeTask_Failure(object sender, StagingTaskEventArgs e)
+        {
             var telemetry = new EventTelemetry("Staging Synchronization Task Failed")
             {
                 Timestamp = DateTimeOffset.UtcNow
             };
+
+            telemetry.Properties[nameof(e.Task.TaskDocumentID)] = e.Task.TaskDocumentID.ToString() ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskID)] = e.Task.TaskID.ToString() ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskSiteID)] = e.Task.TaskSiteID.ToString() ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskTitle)] = e.Task.TaskTitle ?? string.Empty;
+            telemetry.Properties[nameof(e.Task.TaskServers)] = e.Task.TaskServers ?? string.Empty;
 
             _telemetryService.TrackEvent(telemetry);
         }

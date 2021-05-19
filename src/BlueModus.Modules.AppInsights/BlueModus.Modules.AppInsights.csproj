@@ -2,6 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+		<Company>BlueModus</Company>
+		<Authors>Brandon Henricks</Authors>
+		<Copyright>2021</Copyright>
 	</PropertyGroup>
 
 	<ItemGroup>

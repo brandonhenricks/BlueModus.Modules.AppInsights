@@ -25,7 +25,42 @@ namespace BlueModus.Modules.AppInsights.EventHandlers
             _telemetryService = Service.Resolve<ITelemetryService>();
 
             SecurityEvents.Authenticate.Execute += Security_Event_Authenticate_Execute;
+            SecurityEvents.AuthorizeClass.Execute += Security_Event_AuthorizeClass_Execute;
+            SecurityEvents.AuthorizeResource.Execute += Security_Event_AuthorizeResource_Execute;
             base.OnInit();
+        }
+
+        private void Security_Event_AuthorizeResource_Execute(object sender, AuthorizationEventArgs e)
+        {
+            var telemetry = new EventTelemetry("Authorize Resource")
+            {
+                Timestamp = DateTimeOffset.UtcNow
+            };
+
+            telemetry.Properties[nameof(e.Authorized)] = e.Authorized.ToString();
+            telemetry.Properties[nameof(e.ClassName)] = e.ClassName;
+            telemetry.Properties[nameof(e.ElementName)] = e.ElementName;
+            telemetry.Properties[nameof(e.PermissionName)] = e.PermissionName;
+            telemetry.Properties[nameof(e.ResourceName)] = e.ResourceName;
+
+            _telemetryService.TrackEvent(telemetry);
+        }
+
+        private void Security_Event_AuthorizeClass_Execute(object sender, AuthorizationEventArgs e)
+        {
+
+            var telemetry = new EventTelemetry("Authorize Object Or Page Type")
+            {
+                Timestamp = DateTimeOffset.UtcNow
+            };
+
+            telemetry.Properties[nameof(e.Authorized)] = e.Authorized.ToString();
+            telemetry.Properties[nameof(e.ClassName)] = e.ClassName;
+            telemetry.Properties[nameof(e.ElementName)] = e.ElementName;
+            telemetry.Properties[nameof(e.PermissionName)] = e.PermissionName;
+            telemetry.Properties[nameof(e.ResourceName)] = e.ResourceName;
+
+            _telemetryService.TrackEvent(telemetry);
         }
 
         protected override void OnPreInit()
