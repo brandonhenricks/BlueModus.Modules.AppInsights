@@ -19,5 +19,14 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>
-
+	<Target Name="PrepareReleaseNotes" BeforeTargets="GenerateNuspec">
+		<PropertyGroup>
+			<PackageDescription>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../RELEASE-NOTES"))</PackageDescription>
+		</PropertyGroup>
+	</Target>
+	<PropertyGroup>
+		<PackageId>BlueModus.Modules.AppInsights</PackageId>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/brandonhenricks/BlueModus.Modules.AppInsights/</RepositoryUrl>
+	</PropertyGroup>
 </Project>
